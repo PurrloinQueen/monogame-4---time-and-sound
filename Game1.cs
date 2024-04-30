@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Reflection.Emit;
 
 namespace monogame_4___time_and_sound
 {
@@ -17,6 +18,7 @@ namespace monogame_4___time_and_sound
 
         SpriteFont timeFont;
         SoundEffect kaBlooey;
+        SoundEffectInstance kaBlooeyTime;
 
         Color bgColor, kaboomMask;
 
@@ -61,6 +63,7 @@ namespace monogame_4___time_and_sound
             explosionTexture = Content.Load<Texture2D>("deltaruneExplosion");
             timeFont = Content.Load<SpriteFont>("timeFont");
             kaBlooey = Content.Load<SoundEffect>("explosion");
+            kaBlooeyTime = kaBlooey.CreateInstance();
 
         }
 
@@ -74,11 +77,16 @@ namespace monogame_4___time_and_sound
                 bombSeconds = 0;
             }
 
-            if (bombSeconds >= 10 && !esploded)
+            if (bombSeconds >= 15 && !esploded)
             {
-                kaBlooey.Play();
+                kaBlooeyTime.Play();
                 esploded = true;
                 kaboomMask = Color.White;
+            }
+
+            if (kaBlooeyTime.State == SoundState.Stopped && esploded)
+            {
+                Exit();
             }
             
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
